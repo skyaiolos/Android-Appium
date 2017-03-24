@@ -1,0 +1,176 @@
+
+
+自动化测试：Demo code
+
+
+打开VS，创建工程，然后添加 Appium-dotnet-driver.dll and WebDriver 引用   （此Demo用的是 C# code  计算器）
+
+ 
+
+添加 如下命名空间引用：
+
+ 
+
+using
+OpenQA.Selenium.Appium.Android;
+
+using
+OpenQA.Selenium.Appium;
+
+using
+OpenQA.Selenium.Remote;
+
+using
+OpenQA.Selenium;
+
+ 
+
+初始化 android
+driver 代码：
+
+ private static
+AndroidDriver<AppiumWebElement> Initialize(string package, string
+activity)
+
+        {
+
+           
+AndroidDriver<AppiumWebElement> driver = null;
+
+            DesiredCapabilities capabilities =
+new DesiredCapabilities();
+
+           
+capabilities.SetCapability("device", "Android");
+
+           
+capabilities.SetCapability(CapabilityType.Platform,
+"Windows");
+
+           
+capabilities.SetCapability("deviceName", "emulator-5554");        // DeviceName 可以通过adb devices 命令得到。
+
+           
+capabilities.SetCapability("platformName",
+"Android");
+
+           
+capabilities.SetCapability("platformVersion",
+"6.0");
+
+            capabilities.SetCapability("automationName",
+"Appium");
+
+           
+capabilities.SetCapability("unicodeKeyboard",
+"True");
+
+           
+capabilities.SetCapability("appPackage", package);                  // package  是你要测试的 app的 package 。
+
+           
+capabilities.SetCapability("appActivity", activity);                    // activity 是你要测试的 app的 activity
+
+ 
+
+            Uri uri = new
+Uri("http://127.0.0.1:4723/wd/hub");               //  Appium Server ->Setting.
+
+            TimeSpan timeSpan =
+TimeSpan.FromSeconds(120);
+
+            driver = new
+AndroidDriver<AppiumWebElement>(uri, capabilities, timeSpan);
+
+ 
+
+            return driver;
+
+        }
+
+ 
+
+ Appium Server ->Setting.
+
+
+
+ 以 模拟器中的 计算器 app为例：
+
+ static void Main(string[] args)
+
+        {
+
+           
+AndroidDriver<AppiumWebElement> driver =
+Initialize("com.android.calculator2",
+"com.android.calculator2.Calculator");
+
+ 
+
+            AppiumWebElement clear =
+driver.FindElement(By.ClassName("android.widget.Button"));
+
+            clear.Click();
+
+ 
+
+            AppiumWebElement two =
+driver.FindElement(By.Name("2"));
+
+            two.Click();
+
+ 
+
+            AppiumWebElement plus =
+driver.FindElement(By.Id("pcom.android.calculator2:id/op_add"));
+
+            plus.Click();
+
+ 
+
+            AppiumWebElement four =
+driver.FindElement(By.Name("4"));
+
+            four.Click();
+
+ 
+
+            AppiumWebElement equalTo =
+driver.FindElement(By.Name("="));
+
+            equalTo.Click();
+
+        }
+
+* package  获取：
+
+打开你要测试的app，然后 打开 uiautomatorviewer.bat （在 Android SDK安装路径下的
+tools文件夹下）
+
+uiautomatorviewer 可以得到 app的 元素 Id，className 等
+
+
+
+ 
+
+ * activity 获取：
+
+Open the Android Studio , create a project ,click on Android
+Monitor then copy the log to Notepad++
+
+find the "com.android.calculator2" in the
+log  , and the activity "activity
+com.android.calculator2"
+
+
+
+初始化 android driver 代码之后就可以写 test cases了。 
+
+ 
+
+ 
+
+ 
+
+ 元素的 Name， Id， Classname 等可以通过 uiautomatorviewer.bat来找。
+
